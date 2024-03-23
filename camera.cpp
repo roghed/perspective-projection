@@ -1,4 +1,6 @@
 #include "camera.hpp"
+#include "polygon.hpp"
+#include "polygon_projection.hpp"
 #include <armadillo>
 #include <cmath>
 
@@ -79,17 +81,33 @@ void Camera::setFOV(double angle)
     horizontalViewAngle_ = angle / 180 * M_PI;
 }
 
-arma::vec3 Camera::project(arma::vec3 point) const
+arma::vec2 Camera::project(const arma::vec3& point) const
 {
 
     double alpha = arma::dot(projPlane_, projPlane_)
                    / arma::dot(projPlane_, point - position_);
     arma::vec3 c = alpha * (point - position_) - projPlane_;
     arma::vec2 point_projection = {
-        dot(c, hScreenVec_) / dot(hScreenVec_, hScreenVec_), 
-        dot(c, vScreenVec_) / dot(vScreenVec_, vScreenVec_)};
+        (imageDims_[0] / 2.0) * (1.0 + dot(c, hScreenVec_) / dot(hScreenVec_, hScreenVec_)), 
+        (imageDims_[1] / 2.0) * (1.0 - dot(c, vScreenVec_) / dot(vScreenVec_, vScreenVec_))
+    };
 
     return point_projection;
+}
+
+PolygonProjection Camera::project(const Polygon& polygon) const
+{
+    PolygonProjection projection(polygon.nVertices());
+    projection.setColor(polygon.getColor());
+    
+    for (unsigned int i = 0; i < polygon.nVertices(); ++i)
+    {
+        auto p = polygon.getVertex(i);
+        auto p_proj = project(p);
+        projection.setVertex(i, sf::Vector2f{(float)p_proj[0], (float)p_proj[1]});
+    }
+
+    return projection;
 }
 
 void Camera::update()

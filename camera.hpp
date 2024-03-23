@@ -1,6 +1,9 @@
 #pragma once
 #include <armadillo>
 
+class Polygon;
+class PolygonProjection;
+
 class Camera
 {
 public:
@@ -24,7 +27,8 @@ public:
     double getFOV() const;
     void   setFOV(double angle);
 
-    arma::vec3 project(arma::vec3 point) const;
+    arma::vec2        project(const arma::vec3& point) const;
+    PolygonProjection project(const Polygon&) const;
 
 private:
 
