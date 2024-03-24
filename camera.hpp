@@ -22,7 +22,9 @@ public:
     double getProjectionDistance() const;
     void   setProjectionDistance(double distance);
 
-    void   rotate(double angle);
+    void   pitch(double angle);
+    void   yaw(double angle);
+    void   roll(double angle);
 
     double getFOV() const;
     void   setFOV(double angle);
@@ -32,6 +34,9 @@ public:
 
 private:
 
+    arma::vec3 rotate(const arma::vec3& vector, const arma::vec3& axis, 
+                      double angle);
+    
     void update();
 
     arma::uvec2 imageDims_;

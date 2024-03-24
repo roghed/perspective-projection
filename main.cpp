@@ -6,6 +6,7 @@
 int main() 
 {
     constexpr unsigned int WIDTH = 800, HEIGHT = 600;
+    constexpr double MOVEMENT_SCALE = 0.01;
     
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "perspective-projection");
     window.setFramerateLimit(60);
@@ -21,11 +22,25 @@ int main()
         sf::Event event;
         while (window.pollEvent(event)) 
         {
+            switch (event.type)
+            {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            default:
+                break;
+            }
+            
             if (event.type == sf::Event::Closed)
             {
                 window.close();
             }
         }
+
+        camera.roll(0.00002);
+        static bool b = true;
+        b = !b;
+        camera.setProjectionDistance(b ? 1000000.0 : 0.00001);
 
         window.clear();
         window.draw(camera.project(triangle));

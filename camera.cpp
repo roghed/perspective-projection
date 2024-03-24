@@ -59,15 +59,23 @@ void Camera::setProjectionDistance(double distance)
     update();
 }
 
-void Camera::rotate(double angle)
+void Camera::pitch(double angle)
 {
-    double rad_angle = angle / 180 * M_PI;
-    arma::vec3 k = arma::normalise(projPlane_);
-    arma::vec3 v = arma::normalise(arma::cross(arma::cross(k, up_), k));
-    arma::vec3 v_rotated = 
-            v * std::cos(rad_angle) + arma::cross(k, v) * std::sin(rad_angle)
-            + k * (k * v) * (1.0 - std::cos(rad_angle));
-    up_ = v_rotated;
+    arma::vec3 U = arma::cross(projPlane_, up_);
+    up_ = rotate(up_, U, angle);
+    projPlane_ = rotate(projPlane_, U, angle);
+    update();
+}
+
+void Camera::yaw(double angle)
+{
+    projPlane_ = rotate(projPlane_, up_, angle);
+    update();
+}
+
+void Camera::roll(double angle)
+{
+    up_ = rotate(up_, projPlane_, angle);
     update();
 }
 
@@ -110,10 +118,20 @@ PolygonProjection Camera::project(const Polygon& polygon) const
     return projection;
 }
 
+arma::vec3 Camera::rotate(const arma::vec3 &vector, const arma::vec3 &axis, double angle)
+{
+    angle = angle / M_PI * 180;
+    arma::vec3 k = arma::normalise(axis);
+    return vector * std::cos(angle) + arma::cross(k, vector) * std::sin(angle)
+           + k * dot(k, vector) * (1.0 - std::cos(angle));
+}
+
 void Camera::update()
 {
     arma::vec3 U = arma::cross(projPlane_, up_);
     arma::vec3 W = arma::cross(U, projPlane_);
+    up_ = arma::normalise(W); // make up vector (Z) be always perpendicular to
+                              // projection plane vector (a)
     screenCenter_ = projPlane_ + position_;
     hScreenVec_ = 
             arma::normalise(U) * arma::norm(projPlane_)
