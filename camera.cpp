@@ -89,7 +89,21 @@ void Camera::setFOV(double angle)
     horizontalViewAngle_ = angle / 180 * M_PI;
 }
 
-arma::vec2 Camera::project(const arma::vec3& point) const
+void Camera::move(const arma::vec3 &relative_movement)
+{
+    arma::vec3 lr_axis = arma::normalise(arma::cross(projPlane_, up_));
+    arma::vec3 ud_axis = arma::normalise(up_);
+    arma::vec3 fb_axis = arma::normalise(projPlane_);
+    arma::vec3 absolute_movement = {0, 0, 0};
+
+    absolute_movement += relative_movement[0] * lr_axis;
+    absolute_movement += relative_movement[1] * ud_axis;
+    absolute_movement += relative_movement[2] * fb_axis;
+
+    setPosition(getPosition() + absolute_movement);
+}
+
+arma::vec2 Camera::project(const arma::vec3 &point) const
 {
 
     double alpha = arma::dot(projPlane_, projPlane_)

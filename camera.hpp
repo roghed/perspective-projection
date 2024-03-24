@@ -29,6 +29,13 @@ public:
     double getFOV() const;
     void   setFOV(double angle);
 
+    // move the camera by a vector relative to its own position and orientation:
+    // x - left-right movement, perpendicular to the view direction and up 
+    //     vector
+    // y - up-down movement, along the up vector axis
+    // z - forward-backward movement, along the view direction axis
+    void move(const arma::vec3& relative_movement);
+
     arma::vec2        project(const arma::vec3& point) const;
     PolygonProjection project(const Polygon&) const;
 

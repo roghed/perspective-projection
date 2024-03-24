@@ -38,6 +38,7 @@ int main()
         }
 
         camera.roll(0.00002);
+        camera.move({0, 0.005, 0.005});
         static bool b = true;
         b = !b;
         camera.setProjectionDistance(b ? 1000000.0 : 0.00001);
