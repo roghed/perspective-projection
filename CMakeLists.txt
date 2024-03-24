@@ -10,6 +10,8 @@ add_executable(perspective-projection
     camera.hpp camera.cpp
     polygon.hpp polygon.cpp
     polygon_projection.hpp polygon_projection.cpp
+    keyboard_controls.hpp keyboard_controls.cpp
+    mouse_controls.hpp mouse_controls.cpp
     main.cpp)
 target_link_libraries(perspective-projection PRIVATE 
     sfml-graphics 
