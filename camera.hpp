@@ -19,8 +19,8 @@ public:
     arma::vec3 getDirection() const;
     void       setDirection(const arma::vec3& direction_vector);
 
-    double getProjectionDistance() const;
-    void   setProjectionDistance(double distance);
+    double getNearClippingDistance() const;
+    void   setNearClippingDistance(double distance);
 
     void   pitch(double angle);
     void   yaw(double angle);

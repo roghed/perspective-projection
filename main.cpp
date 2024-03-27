@@ -42,6 +42,12 @@ int main()
             case sf::Event::Closed:
                 window.close();
                 break;
+            case sf::Event::LostFocus:
+                mouse_controls.setMouseCapture(false);
+                break;
+            case sf::Event::GainedFocus:
+                mouse_controls.setMouseCapture(true);
+                break;
             default:
                 mouse_controls.handle(event);
                 break;

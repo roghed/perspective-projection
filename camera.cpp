@@ -7,7 +7,7 @@
 Camera::Camera() :
     imageDims_{800, 600},
     position_{0, 0, 0},
-    projPlane_{1, 0, 0},
+    projPlane_{0.01, 0, 0},
     up_{0, 0, 1},
     horizontalViewAngle_{75.0 / 180 * M_PI}
 {
@@ -43,17 +43,17 @@ arma::vec3 Camera::getDirection() const
 
 void Camera::setDirection(const arma::vec3 &direction_vector)
 {
-    double proj_distance = getProjectionDistance();
+    double proj_distance = getNearClippingDistance();
     projPlane_ = direction_vector;
-    setProjectionDistance(proj_distance);
+    setNearClippingDistance(proj_distance);
 }
 
-double Camera::getProjectionDistance() const
+double Camera::getNearClippingDistance() const
 {
     return arma::norm(projPlane_);
 }
 
-void Camera::setProjectionDistance(double distance)
+void Camera::setNearClippingDistance(double distance)
 {
     projPlane_ = arma::normalise(projPlane_) * distance;
     update();
@@ -119,12 +119,14 @@ arma::vec2 Camera::project(const arma::vec3 &point) const
 
 PolygonProjection Camera::project(const Polygon& polygon) const
 {
-    PolygonProjection projection(polygon.nVertices());
-    projection.setColor(polygon.getColor());
+    auto clipped_poly = Polygon::clip(polygon, projPlane_, screenCenter_);
     
-    for (unsigned int i = 0; i < polygon.nVertices(); ++i)
+    PolygonProjection projection(clipped_poly.nVertices());
+    projection.setColor(clipped_poly.getColor());
+    
+    for (unsigned int i = 0; i < clipped_poly.nVertices(); ++i)
     {
-        auto p = polygon.getVertex(i);
+        auto p = clipped_poly.getVertex(i);
         auto p_proj = project(p);
         projection.setVertex(i, sf::Vector2f{(float)p_proj[0], (float)p_proj[1]});
     }
