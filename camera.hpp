@@ -1,8 +1,12 @@
 #pragma once
 #include <armadillo>
 
+namespace sf
+{
+    class VertexArray;
+}
+
 class Polygon;
-class PolygonProjection;
 
 class Camera
 {
@@ -36,8 +40,11 @@ public:
     // z - forward-backward movement, along the view direction axis
     void move(const arma::vec3& relative_movement);
 
-    arma::vec2        project(const arma::vec3& point) const;
-    PolygonProjection project(const Polygon&) const;
+    void setWireframe(bool enabled);
+    bool isWireframeEnabled() const;
+
+    arma::vec2      project(const arma::vec3& point) const;
+    sf::VertexArray project(const Polygon&) const;
 
 private:
 
@@ -45,6 +52,8 @@ private:
                       double angle);
     
     void update();
+
+    bool wireframeEnabled_;
 
     arma::uvec2 imageDims_;
     arma::vec3  position_;            // b

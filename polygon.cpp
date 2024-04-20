@@ -1,7 +1,8 @@
 #include "polygon.hpp"
 
 Polygon::Polygon(unsigned int n_vertices) :
-    vertices_(n_vertices)
+    vertices_(n_vertices),
+    color_(sf::Color::White)
 {}
 
 unsigned int Polygon::nVertices() const

@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "polygon.hpp"
 #include "polygon_projection.hpp"
+#include <SFML/Graphics/VertexArray.hpp>
 #include <armadillo>
 #include <cmath>
 
@@ -9,7 +10,8 @@ Camera::Camera() :
     position_{0, 0, 0},
     projPlane_{0.01, 0, 0},
     up_{0, 0, 1},
-    horizontalViewAngle_{75.0 / 180 * M_PI}
+    horizontalViewAngle_{75.0 / 180 * M_PI},
+    wireframeEnabled_(false)
 {
     update();
 }
@@ -103,6 +105,16 @@ void Camera::move(const arma::vec3 &relative_movement)
     setPosition(getPosition() + absolute_movement);
 }
 
+void Camera::setWireframe(bool enabled)
+{
+    wireframeEnabled_ = enabled;
+}
+
+bool Camera::isWireframeEnabled() const
+{
+    return wireframeEnabled_;
+}
+
 arma::vec2 Camera::project(const arma::vec3 &point) const
 {
 
@@ -117,18 +129,30 @@ arma::vec2 Camera::project(const arma::vec3 &point) const
     return point_projection;
 }
 
-PolygonProjection Camera::project(const Polygon& polygon) const
+sf::VertexArray Camera::project(const Polygon& polygon) const
 {
     auto clipped_poly = Polygon::clip(polygon, projPlane_, screenCenter_);
+    auto poly_color = polygon.getColor();
     
-    PolygonProjection projection(clipped_poly.nVertices());
-    projection.setColor(clipped_poly.getColor());
-    
-    for (unsigned int i = 0; i < clipped_poly.nVertices(); ++i)
+    sf::VertexArray projection;
+    projection.resize(clipped_poly.nVertices());
+
+    for (int i = 0; i < projection.getVertexCount(); ++i)
     {
-        auto p = clipped_poly.getVertex(i);
-        auto p_proj = project(p);
-        projection.setVertex(i, sf::Vector2f{(float)p_proj[0], (float)p_proj[1]});
+        auto vertex_projection = project(clipped_poly.getVertex(i));
+        
+        projection[i].color = poly_color;
+        projection[i].position.x = vertex_projection[0];
+        projection[i].position.y = vertex_projection[1];
+    }
+
+    if (wireframeEnabled_)
+    {
+        projection.setPrimitiveType(sf::LineStrip);
+    }
+    else
+    {
+        projection.setPrimitiveType(sf::TriangleFan);
     }
 
     return projection;

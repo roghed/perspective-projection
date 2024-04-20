@@ -19,13 +19,39 @@ int main()
     window.setMouseCursorVisible(false);
     window.setMouseCursorGrabbed(true);
     
-    Polygon triangle(3);
-    triangle.setVertex(0, {3,   -1,  1});
-    triangle.setVertex(1, {4,    1,  1});
-    triangle.setVertex(2, {3.5,  0, -1});
-    triangle.setColor(sf::Color::Red);
+    Polygon triangle1(3);
+    triangle1.setVertex(0, {3,   -1,  1});
+    triangle1.setVertex(1, {4,    1,  1});
+    triangle1.setVertex(2, {3.5,  0, -1});
+    triangle1.setColor(sf::Color::Red);
+    Polygon triangle2(3);
+    triangle2.setVertex(0, {5,   -1,  1});
+    triangle2.setVertex(1, {6,    1,  1});
+    triangle2.setVertex(2, {5.5,  0, -1});
+    triangle2.setColor(sf::Color::Blue);
+
+    Polygon tetrahedron1(3);
+    tetrahedron1.setVertex(0, {1, 1, 1});
+    tetrahedron1.setVertex(1, {-1, -1, 1});
+    tetrahedron1.setVertex(2, {-1, 1, -1});
+    Polygon tetrahedron2(3);
+    tetrahedron2.setVertex(0, {1, 1, 1});
+    tetrahedron2.setVertex(1, {-1, -1, 1});
+    tetrahedron2.setVertex(2, {1, -1, -1});
+    tetrahedron2.setColor(sf::Color::Green);
+    Polygon tetrahedron3(3);
+    tetrahedron3.setVertex(0, {1, 1, 1});
+    tetrahedron3.setVertex(1, {1, -1, -1});
+    tetrahedron3.setVertex(2, {-1, 1, -1});
+    tetrahedron3.setColor(sf::Color::Yellow);
+    Polygon tetrahedron4(3);
+    tetrahedron4.setVertex(0, {-1, -1, 1});
+    tetrahedron4.setVertex(1, {1, -1, -1});
+    tetrahedron4.setVertex(2, {-1, 1, -1});
+    tetrahedron4.setColor(sf::Color::Magenta);
     
     Camera camera;
+    camera.setWireframe(true);
 
     MouseControlsManager mouse_controls(window, MOUSE_SENSITIVITY, ZOOM_SENSITIVITY);
     mouse_controls.setMouseCapture(true);
@@ -62,7 +88,15 @@ int main()
         mouse_controls.updateMousePosition();
 
         window.clear();
-        window.draw(camera.project(triangle));
+
+        window.draw(camera.project(triangle2));
+        window.draw(camera.project(triangle1));
+
+        window.draw(camera.project(tetrahedron1));
+        window.draw(camera.project(tetrahedron2));
+        window.draw(camera.project(tetrahedron3));
+        window.draw(camera.project(tetrahedron4));
+
         window.display();
     }
 }
