@@ -12,6 +12,7 @@ add_executable(perspective-projection
     polygon_projection.hpp polygon_projection.cpp
     keyboard_controls.hpp keyboard_controls.cpp
     mouse_controls.hpp mouse_controls.cpp
+    bsp_tree.hpp bsp_tree.cpp
     main.cpp)
 target_link_libraries(perspective-projection PRIVATE 
     sfml-graphics 

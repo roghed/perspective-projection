@@ -32,6 +32,10 @@ public:
     static Polygon clip(const Polygon&, const arma::vec3& plane_normal_vec,
                         const arma::vec3& plane_point);
 
+    bool isCoplanar(const Polygon&) const;
+
+    arma::vec3 normal() const;
+
 private:
 
     static std::optional<Segment> clipLineSegment(

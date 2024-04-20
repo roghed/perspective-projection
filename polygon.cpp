@@ -1,4 +1,9 @@
 #include "polygon.hpp"
+#include <SFML/Graphics/Color.hpp>
+#include <armadillo>
+#include <stdexcept>
+#include <vector>
+#include <optional>
 
 Polygon::Polygon(unsigned int n_vertices) :
     vertices_(n_vertices),
@@ -86,6 +91,31 @@ Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal_vec
     return clipped_polygon;
 }
 
+bool Polygon::isCoplanar(const Polygon& other) const
+{
+    arma::vec3 v = getVertex(1) - getVertex(0);
+    arma::vec3 u = getVertex(2) - getVertex(0);
+    arma::vec3 n = arma::cross(v, u);
+
+    for (auto i = 0u; i < 3; ++i)
+    {
+        auto x = other.getVertex(i);
+        arma::vec3 w = x - getVertex(0);
+        if (arma::dot(w, n) != 0)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+arma::vec3 Polygon::normal() const
+{
+    return arma::normalise(arma::cross(getVertex(0) - getVertex(1), 
+                                       getVertex(0) - getVertex(2)));
+}
+
 std::optional<Polygon::Segment> Polygon::clipLineSegment(
     const Segment& line_segment, const arma::vec3 &plane_normal_vec, 
     const arma::vec3 &plane_point)
@@ -99,8 +129,8 @@ std::optional<Polygon::Segment> Polygon::clipLineSegment(
     }
 
     arma::vec3 d = line_segment.first - line_segment.second;
-    auto t = dot(plane_normal_vec, plane_point - line_segment.first)
-             / dot(plane_normal_vec, d);
+    auto t = arma::dot(plane_normal_vec, plane_point - line_segment.first)
+             / arma::dot(plane_normal_vec, d);
     arma::vec3 plane_intersection = line_segment.first + t * d;
 
     if (end_clipped)

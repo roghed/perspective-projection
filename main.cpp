@@ -20,36 +20,50 @@ int main()
     window.setMouseCursorVisible(false);
     window.setMouseCursorGrabbed(true);
     
+    std::vector<Polygon> scene;
+
     Polygon triangle1(3);
     triangle1.setVertex(0, {3,   -1,  1});
     triangle1.setVertex(1, {4,    1,  1});
     triangle1.setVertex(2, {3.5,  0, -1});
     triangle1.setColor(sf::Color::Red);
+    scene.push_back(triangle1);
+
     Polygon triangle2(3);
     triangle2.setVertex(0, {5,   -1,  1});
     triangle2.setVertex(1, {6,    1,  1});
     triangle2.setVertex(2, {5.5,  0, -1});
     triangle2.setColor(sf::Color::Blue);
+    scene.push_back(triangle2);
 
     Polygon tetrahedron1(3);
     tetrahedron1.setVertex(0, {1, 1, 1});
     tetrahedron1.setVertex(1, {-1, -1, 1});
     tetrahedron1.setVertex(2, {-1, 1, -1});
+    scene.push_back(tetrahedron1);
+
     Polygon tetrahedron2(3);
     tetrahedron2.setVertex(0, {1, 1, 1});
     tetrahedron2.setVertex(1, {-1, -1, 1});
     tetrahedron2.setVertex(2, {1, -1, -1});
     tetrahedron2.setColor(sf::Color::Green);
+    scene.push_back(tetrahedron2);
+
     Polygon tetrahedron3(3);
     tetrahedron3.setVertex(0, {1, 1, 1});
     tetrahedron3.setVertex(1, {1, -1, -1});
     tetrahedron3.setVertex(2, {-1, 1, -1});
     tetrahedron3.setColor(sf::Color::Yellow);
+    scene.push_back(tetrahedron3);
+
     Polygon tetrahedron4(3);
     tetrahedron4.setVertex(0, {-1, -1, 1});
     tetrahedron4.setVertex(1, {1, -1, -1});
     tetrahedron4.setVertex(2, {-1, 1, -1});
     tetrahedron4.setColor(sf::Color::Magenta);
+    scene.push_back(tetrahedron4);
+
+    BSPTree bsp_tree(scene);
     
     Camera camera;
     camera.setWireframe(true);
@@ -96,13 +110,11 @@ int main()
 
         window.clear();
 
-        window.draw(camera.project(triangle2));
-        window.draw(camera.project(triangle1));
-
-        window.draw(camera.project(tetrahedron1));
-        window.draw(camera.project(tetrahedron2));
-        window.draw(camera.project(tetrahedron3));
-        window.draw(camera.project(tetrahedron4));
+        auto sorted_polygons = bsp_tree.depthSortedPolygons(camera.getPosition());
+        for (auto poly_ptr : sorted_polygons)
+        {
+            window.draw(camera.project(*poly_ptr));
+        }
 
         window.display();
     }
