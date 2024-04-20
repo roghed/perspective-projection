@@ -3,6 +3,7 @@
 #include "camera.hpp"
 #include "keyboard_controls.hpp"
 #include "mouse_controls.hpp"
+#include "bsp_tree.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -73,6 +74,12 @@ int main()
                 break;
             case sf::Event::GainedFocus:
                 mouse_controls.setMouseCapture(true);
+                break;
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Key::Enter)
+                {
+                    camera.setWireframe(!camera.isWireframeEnabled());
+                }
                 break;
             default:
                 mouse_controls.handle(event);
