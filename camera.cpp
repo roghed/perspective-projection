@@ -117,7 +117,6 @@ bool Camera::isWireframeEnabled() const
 
 arma::vec2 Camera::project(const arma::vec3 &point) const
 {
-
     double alpha = arma::dot(projPlane_, projPlane_)
                    / arma::dot(projPlane_, point - position_);
     arma::vec3 c = alpha * (point - position_) - projPlane_;

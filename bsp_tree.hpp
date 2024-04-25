@@ -10,6 +10,8 @@ class BSPTree
 {
 public:
 
+    BSPTree() = default;
+
     // build BSP tree for the given set of scene polygons
     BSPTree(const std::vector<Polygon>& scene_polygons);
 
