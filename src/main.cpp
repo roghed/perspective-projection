@@ -33,7 +33,7 @@ int main()
     
     Scene scene;
     {
-        auto tetrahedron = Object("../scene/tetrahedron.obj");
+        auto tetrahedron = Object("./scene/tetrahedron.obj");
         for (int i = 0; i < tetrahedron.nPolygons(); ++i)
         {
             auto poly = tetrahedron.getPolygon(i);
