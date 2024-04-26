@@ -77,9 +77,9 @@ void WavefrontObjFileParser::reportError(std::size_t line_number, const std::str
 
 bool WavefrontObjFileParser::parseLine(const std::string &line, std::size_t line_number)
 {
-    static const std::regex FACE_DECL_REG(R"(f(\s+(\d+)([\\\/]\d*){0,2}){3,})");
+    static const std::regex FACE_DECL_REG(R"(^f(\s+(\d+)([\\\/]\d*){0,2}){3,}\s*$)");
     static const std::regex FACE_VERTEX_INDICES_REG(R"((\d+)(?:[\/\\](\d*))?(?:[\/\\](\d*))?)");
-    static const std::regex VERTEX_DECL_REG(R"(^v\s([+-]?([0-9]*[.])?[0-9]+)\s([+-]?([0-9]*[.])?[0-9]+)\s([+-]?([0-9]*[.])?[0-9]+)(\s([+-]?([0-9]*[.])?[0-9]+))?$)");
+    static const std::regex VERTEX_DECL_REG(R"(^v\s+([+-]?([0-9]*[.])?[0-9]+)\s([+-]?([0-9]*[.])?[0-9]+)\s([+-]?([0-9]*[.])?[0-9]+)(\s([+-]?([0-9]*[.])?[0-9]+))?\s*$)");
     
     if (std::smatch r; std::regex_match(line, r, VERTEX_DECL_REG))
     {
