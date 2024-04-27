@@ -76,9 +76,9 @@ Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal,
     {
         auto e = polygon.getEdge(i);
         bool is_edge_start_inside = 
-            arma::dot(plane_normal, e.first - plane_point) >= 0;
+            arma::dot(plane_normal, e.first - plane_point) > 0;
         bool is_edge_end_inside =
-            arma::dot(plane_normal, e.second - plane_point) >= 0;
+            arma::dot(plane_normal, e.second - plane_point) > 0;
 
         if (is_edge_start_inside)
         {
