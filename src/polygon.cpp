@@ -66,7 +66,7 @@ void Polygon::setColor(const sf::Color &color)
     color_ = color;
 }
 
-Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal_vec, 
+Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal, 
                       const arma::vec3 &plane_point)
 {
     Polygon clipped_polygon = {};
@@ -74,17 +74,22 @@ Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal_vec
 
     for (auto i = 0u; i < polygon.nEdges(); ++i)
     {
-        auto edge = polygon.getEdge(i);
-        auto clipped_edge = clipLineSegment(edge, plane_normal_vec, plane_point);
+        auto e = polygon.getEdge(i);
+        bool is_edge_start_inside = 
+            arma::dot(plane_normal, e.first - plane_point) >= 0;
+        bool is_edge_end_inside =
+            arma::dot(plane_normal, e.second - plane_point) >= 0;
 
-        if (clipped_edge.has_value())
-        {                        
-            if (clipped_polygon.empty())
-            {
-                clipped_polygon.addVertex(clipped_edge->first);
-            }
-            
-            clipped_polygon.addVertex(clipped_edge->second);
+        if (is_edge_start_inside)
+        {
+            clipped_polygon.addVertex(e.first);
+        }
+
+        if (is_edge_start_inside != is_edge_end_inside)
+        {
+            auto intersection_point = linePlaneIntersection(
+                    e.first, e.second, plane_normal, plane_point);
+            clipped_polygon.addVertex(intersection_point);            
         }
     }
 
@@ -116,30 +121,13 @@ arma::vec3 Polygon::normal() const
                                        getVertex(0) - getVertex(2)));
 }
 
-std::optional<Polygon::Segment> Polygon::clipLineSegment(
-    const Segment& line_segment, const arma::vec3 &plane_normal_vec, 
-    const arma::vec3 &plane_point)
+arma::vec3 Polygon::linePlaneIntersection(const arma::vec3& line_point_a,
+                                          const arma::vec3& line_point_b,
+                                          const arma::vec3& plane_normal,
+                                          const arma::vec3& plane_point)
 {
-    bool start_clipped = arma::dot(plane_normal_vec, line_segment.first - plane_point) < 0;
-    bool end_clipped = arma::dot(plane_normal_vec, line_segment.second - plane_point) < 0;
-    
-    if (start_clipped && end_clipped)
-    {
-        return std::nullopt;
-    }
-
-    arma::vec3 d = line_segment.first - line_segment.second;
-    auto t = arma::dot(plane_normal_vec, plane_point - line_segment.first)
-             / arma::dot(plane_normal_vec, d);
-    arma::vec3 plane_intersection = line_segment.first + t * d;
-
-    if (end_clipped)
-    {
-        return Segment(line_segment.first, plane_intersection);
-    }
-    else if (start_clipped)
-    {
-        return Segment(plane_intersection, line_segment.second);
-    }
-    else return line_segment;
-}
+    auto line_direction = line_point_b - line_point_a;    
+    auto t = arma::dot(plane_point - line_point_a, plane_normal)
+             / arma::dot(line_direction, plane_normal);    
+    return line_point_a + t * line_direction;
+}  

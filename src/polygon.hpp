@@ -38,9 +38,9 @@ public:
 
 private:
 
-    static std::optional<Segment> clipLineSegment(
-        const Segment& line_segment, const arma::vec3& plane_normal_vec, 
-        const arma::vec3& plane_point);
+    static arma::vec3 linePlaneIntersection(
+        const arma::vec3& line_point_a, const arma::vec3& line_point_b,
+        const arma::vec3& plane_normal, const arma::vec3& plane_point);
 
     std::vector<arma::vec3> vertices_;
     sf::Color               color_;
