@@ -9,6 +9,7 @@
 namespace sf
 {
     class RenderTarget;
+    class Color;
 }
 
 class Scene : public sf::Drawable
@@ -26,9 +27,14 @@ public:
 
     Camera& camera();
 
+    bool colorPolygonsByDrawingOrder() const;
+    void setColorPolygonsByDrawingOrder(bool enabled);
+
     void rebuildBSPTree() const;
 
 private:
+
+    static sf::Color debugColorMap(std::size_t polygon_index, std::size_t n_polygons);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -36,4 +42,5 @@ private:
     Camera              camera_;
     mutable BSPTree     bspTree_;
     mutable bool        treeNeedsRebuilding_ = false;
+    bool                bspDebugPolygonColoring_ = false;
 };

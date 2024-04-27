@@ -50,6 +50,16 @@ Camera& Scene::camera()
     return camera_;
 }
 
+bool Scene::colorPolygonsByDrawingOrder() const
+{
+    return bspDebugPolygonColoring_;
+}
+
+void Scene::setColorPolygonsByDrawingOrder(bool enabled)
+{
+    bspDebugPolygonColoring_ = enabled;
+}
+
 void Scene::rebuildBSPTree() const
 {
     std::vector<Polygon> all_polygons;
@@ -64,6 +74,41 @@ void Scene::rebuildBSPTree() const
     bspTree_ = BSPTree(all_polygons);
 }
 
+sf::Color Scene::debugColorMap(std::size_t polygon_index, std::size_t n_polygons)
+{    
+    float value = float(polygon_index + 1) / n_polygons;
+    
+    sf::Color clr;
+    clr.a = 255;
+    
+    if (value < 0.25) 
+    {
+        clr.r = 0;
+        clr.g = static_cast<int>(255 * (4 * value));
+        clr.b = 255;
+    } 
+    else if (value < 0.5) 
+    {
+        clr.r = 0;
+        clr.g = 255;
+        clr.b = static_cast<int>(255 * (1 - 4 * (value - 0.25)));
+    } 
+    else if (value < 0.75) 
+    {
+        clr.r = static_cast<int>(255 * (4 * (value - 0.5)));
+        clr.g = 255;
+        clr.b = 0;
+    } 
+    else 
+    {
+        clr.r = 255;
+        clr.g = static_cast<int>(255 * (1 - 4 * (value - 0.75)));
+        clr.b = 0;
+    }
+
+    return clr;
+}
+
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     if (treeNeedsRebuilding_)
@@ -72,10 +117,18 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
         treeNeedsRebuilding_ = false;
     }
     
-    // using painter's algorithm
     auto sorted_polygons = bspTree_.depthSortedPolygons(camera_.getPosition());
-    for (const Polygon* p : sorted_polygons)
+    for (std::size_t i = 0; i < sorted_polygons.size(); ++i)
     {
-        target.draw(camera_.project(*p), states);
+        if (bspDebugPolygonColoring_)
+        {
+            Polygon p_cpy = *sorted_polygons[i];
+            p_cpy.setColor(debugColorMap(i, sorted_polygons.size()));
+            target.draw(camera_.project(p_cpy), states);
+        }
+        else
+        {
+            target.draw(camera_.project(*sorted_polygons[i]), states);
+        }
     }
 }
