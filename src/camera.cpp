@@ -147,6 +147,7 @@ sf::VertexArray Camera::project(const Polygon& polygon) const
 
     if (wireframeEnabled_)
     {
+        projection.append(projection[0]);
         projection.setPrimitiveType(sf::LineStrip);
     }
     else
