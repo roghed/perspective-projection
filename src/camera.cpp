@@ -1,8 +1,11 @@
 #include "camera.hpp"
 #include "polygon.hpp"
-#include "polygon_projection.hpp"
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/PrimitiveType.hpp>
 #include <armadillo>
+#include <vector>
+
+#define _USE_MATH_DEFINES // for M_PI
 #include <cmath>
 
 Camera::Camera() :

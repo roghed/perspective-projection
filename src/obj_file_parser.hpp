@@ -2,12 +2,11 @@
 #include "object.hpp"
 #include <armadillo>
 #include <filesystem>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <vector>
-#include <string>
 #include <cstddef>
+#include <vector>
+#include <sstream>
+#include <string>
 
 // reads vertices and faces data from a Wavefront .obj file
 // all other elements apart from vertices and faces are ignored

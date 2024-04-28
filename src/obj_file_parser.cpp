@@ -7,8 +7,10 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <iostream>
 #include <ios>
 #include <regex>
+#include <optional>
 
 namespace fs = std::filesystem;
 

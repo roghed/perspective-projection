@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <armadillo>
 #include <cstddef>
 #include <vector>

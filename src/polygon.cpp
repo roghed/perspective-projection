@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <vector>
 #include <optional>
+#include <sstream>
+#include <string>
 
 Polygon::Polygon(unsigned int n_vertices) :
     vertices_(n_vertices),
@@ -51,7 +53,7 @@ Polygon::Edge Polygon::getEdge(unsigned int index) const
     }
 }
 
-void Polygon::addVertex(const arma::vec &position)
+void Polygon::addVertex(const arma::vec3 &position)
 {
     vertices_.emplace_back(position);
 }

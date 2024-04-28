@@ -1,9 +1,14 @@
 #include "scene.hpp"
+#include "object.hpp"
+#include "polygon.hpp"
+#include "camera.hpp"
 #include "keyboard_controls.hpp"
 #include "mouse_controls.hpp"
-#include "vec.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/Event.hpp>
 #include <random>
 
 sf::Color randomColor()

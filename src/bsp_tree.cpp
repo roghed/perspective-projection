@@ -1,6 +1,8 @@
 #include "bsp_tree.hpp"
+#include "polygon.hpp"
 #include <armadillo>
 #include <vector>
+#include <stdexcept>
 
 BSPTree::BSPTree(const std::vector<Polygon> &scene_polygons)
 {

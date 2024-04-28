@@ -3,6 +3,8 @@
 #include <SFML/Graphics/Color.hpp>
 #include <armadillo>
 #include <filesystem>
+#include <vector>
+#include <cstddef>
 
 // class for 3D objects (set of polygons)
 class Object

@@ -2,6 +2,9 @@
 #include <armadillo>
 #include <SFML/Graphics/Color.hpp>
 #include <optional>
+#include <utility>
+#include <string>
+#include <vector>
 
 // class for 3D convex polygons
 class Polygon
@@ -24,7 +27,7 @@ public:
 
     Edge getEdge(unsigned int index) const;
 
-    void addVertex(const arma::vec& position);
+    void addVertex(const arma::vec3& position);
 
     sf::Color getColor() const;
     void      setColor(const sf::Color& color);

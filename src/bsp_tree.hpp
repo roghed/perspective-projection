@@ -2,8 +2,6 @@
 #include "polygon.hpp"
 #include <armadillo>
 #include <vector>
-#include <iterator>
-#include <cstddef>
 
 // data structure for the binary space partitioning algorithm
 class BSPTree

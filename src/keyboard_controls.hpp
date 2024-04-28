@@ -1,6 +1,5 @@
 #pragma once
 #include <armadillo>
-#include <SFML/Window/Event.hpp>
 
 class KeyboardControlsManager
 {

@@ -4,7 +4,9 @@
 #include "bsp_tree.hpp"
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <vector>
+#include <cstddef>
 
 namespace sf
 {
