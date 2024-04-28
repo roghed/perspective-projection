@@ -75,17 +75,17 @@ Polygon Polygon::clip(const Polygon& polygon, const arma::vec3 &plane_normal,
     for (auto i = 0u; i < polygon.nEdges(); ++i)
     {
         auto e = polygon.getEdge(i);
-        bool is_edge_start_inside = 
-            arma::dot(plane_normal, e.first - plane_point) > 0;
-        bool is_edge_end_inside =
-            arma::dot(plane_normal, e.second - plane_point) > 0;
+        double edge_start_dot = arma::dot(plane_normal, e.first - plane_point);
+        double edge_end_dot = arma::dot(plane_normal, e.second - plane_point);
+        bool is_start_inside = edge_start_dot > 1e-6;
+        bool is_end_inside = edge_end_dot > 1e-6;
 
-        if (is_edge_start_inside)
+        if (is_start_inside)
         {
             clipped_polygon.addVertex(e.first);
         }
 
-        if (is_edge_start_inside != is_edge_end_inside)
+        if (is_start_inside != is_end_inside)
         {
             auto intersection_point = linePlaneIntersection(
                     e.first, e.second, plane_normal, plane_point);
