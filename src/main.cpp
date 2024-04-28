@@ -1,6 +1,7 @@
 #include "scene.hpp"
 #include "keyboard_controls.hpp"
 #include "mouse_controls.hpp"
+#include "vec.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <random>
@@ -20,7 +21,7 @@ sf::Color randomColor()
 
 int main() 
 {
-    constexpr unsigned int WIDTH = 800, HEIGHT = 600;
+    constexpr unsigned int WIDTH = 1280, HEIGHT = 720;
     constexpr double MOUSE_SENSITIVITY = 0.000025;
     constexpr double MOVEMENT_SPEED = 0.02;
     constexpr double ROLL_SPEED = 0.001;
@@ -28,23 +29,24 @@ int main()
     
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "perspective-projection");
     window.setFramerateLimit(60);
-    //window.setMouseCursorVisible(false);
-    //window.setMouseCursorGrabbed(true);
+    window.setMouseCursorVisible(false);
+    window.setMouseCursorGrabbed(true);
     
     Scene scene;
     {
-        auto tetrahedron = Object("scene/tetrahedron.obj");
+        auto tetrahedron = Object("../scene/tetrahedron.obj");
         for (int i = 0; i < tetrahedron.nPolygons(); ++i)
         {
             auto poly = tetrahedron.getPolygon(i);
             poly.setColor(randomColor());
             tetrahedron.setPolygon(i, poly);
         }
-        tetrahedron.setOrigin({-0.2, 0.333, -0.5});
+        tetrahedron.setOrigin({0, -5, 0});
         scene.addObject(tetrahedron);
     }
+
     {
-        auto cube = Object("scene/cube.obj");
+        auto cube = Object("../scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
@@ -56,39 +58,55 @@ int main()
     }
 
     {
-        auto cube = Object("scene/cube.obj");
+        auto cube = Object("../scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
             poly.setColor(randomColor());
             cube.setPolygon(i, poly);
         }
-        cube.setOrigin({0.5, 0.5, 0.5});
+        cube.setOrigin({0, 2, 0});
         scene.addObject(cube);
     }
 
     {
-        auto triangle = Object("scene/triangle.obj");
-        for (int i = 0; i < triangle.nPolygons(); ++i)
+        auto cube = Object("../scene/cube.obj");
+        for (int i = 0; i < cube.nPolygons(); ++i)
         {
-            auto poly = triangle.getPolygon(i);
+            auto poly = cube.getPolygon(i);
             poly.setColor(randomColor());
-            triangle.setPolygon(i, poly);
-        }        
-        triangle.setOrigin({-0.5, 0, 0});
-        scene.addObject(triangle);
+            cube.setPolygon(i, poly);
+        }
+        cube.setOrigin({2, 0, 0});
+        scene.addObject(cube);
     }
 
     {
-        auto pentagon = Object("scene/pentagon.obj");
-        auto poly = pentagon.getPolygon(0);
-        poly.setColor(randomColor());
-        pentagon.setPolygon(0, poly);
-        scene.addObject(pentagon);
+        auto cube = Object("../scene/cube.obj");
+        for (int i = 0; i < cube.nPolygons(); ++i)
+        {
+            auto poly = cube.getPolygon(i);
+            poly.setColor(randomColor());
+            cube.setPolygon(i, poly);
+        }
+        cube.setOrigin({2, 2, 0});
+        scene.addObject(cube);
     }
 
-    scene.camera().setPosition({-5, 0, 0});
-    scene.camera().setNearClippingDistance(0.01);
+    {
+        auto cyclic_occlusion = Object("../scene/cyclic_occlusion.obj");
+        for (int i = 0; i < cyclic_occlusion.nPolygons(); ++i)
+        {
+            auto poly = cyclic_occlusion.getPolygon(i);
+            poly.setColor(randomColor());
+            cyclic_occlusion.setPolygon(i, poly);
+        }
+        cyclic_occlusion.setOrigin({0, 4, 0});
+        scene.addObject(cyclic_occlusion);
+    }
+
+    scene.camera().setPosition({-3, 0, 0});
+    scene.camera().setNearClippingDistance(0.05);
 
     MouseControlsManager mouse_controls(window, MOUSE_SENSITIVITY, ZOOM_SENSITIVITY);
     mouse_controls.setMouseCapture(true);
