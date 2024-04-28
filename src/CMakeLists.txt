@@ -11,6 +11,7 @@ add_executable(perspective-projection
     object.hpp object.cpp
     obj_file_parser.hpp obj_file_parser.cpp
     scene.hpp scene.cpp
+    vec.hpp vec.cpp
     main.cpp)
 target_link_libraries(perspective-projection PRIVATE 
     sfml-graphics 

@@ -36,6 +36,9 @@ public:
 
     arma::vec3 normal() const;
 
+    // for debugging only
+    std::string toString() const;
+
 private:
 
     static arma::vec3 linePlaneIntersection(

@@ -121,10 +121,29 @@ arma::vec3 Polygon::normal() const
                                        getVertex(0) - getVertex(2)));
 }
 
-arma::vec3 Polygon::linePlaneIntersection(const arma::vec3& line_point_a,
-                                          const arma::vec3& line_point_b,
-                                          const arma::vec3& plane_normal,
-                                          const arma::vec3& plane_point)
+std::string Polygon::toString() const
+{
+    std::stringstream ss;
+    
+    ss << "[";
+    for (int i = 0; i < nVertices(); ++i)
+    {
+        auto v = getVertex(i);
+        ss << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+        if (i != nVertices() - 1)
+        {
+            ss << ", ";
+        }
+    }
+    ss << "]";
+
+    return ss.str();
+}
+
+arma::vec3 Polygon::linePlaneIntersection(const arma::vec3 &line_point_a,
+                                          const arma::vec3 &line_point_b,
+                                          const arma::vec3 &plane_normal,
+                                          const arma::vec3 &plane_point)
 {
     auto line_direction = line_point_b - line_point_a;    
     auto t = arma::dot(plane_point - line_point_a, plane_normal)
