@@ -131,10 +131,15 @@ arma::vec2 Camera::project(const arma::vec3 &point) const
 sf::VertexArray Camera::project(const Polygon& polygon) const
 {
     auto clipped_poly = Polygon::clip(polygon, projPlane_, screenCenter_);
-    auto poly_color = polygon.getColor();
+    if (clipped_poly.empty())
+    {
+        return {};
+    }
+
     
     sf::VertexArray projection;
     projection.resize(clipped_poly.nVertices());
+    auto poly_color = polygon.getColor();
 
     for (int i = 0; i < projection.getVertexCount(); ++i)
     {
