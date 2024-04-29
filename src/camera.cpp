@@ -13,7 +13,7 @@ Camera::Camera() :
     position_{0, 0, 0},
     projPlane_{0.01, 0, 0},
     up_{0, 0, 1},
-    horizontalViewAngle_{75.0 / 180 * M_PI},
+    horizontalViewAngle_{90.0 / 360 * M_PI},
     wireframeEnabled_(false)
 {
     update();
@@ -86,12 +86,12 @@ void Camera::roll(double angle)
 
 double Camera::getFOV() const
 {
-    return horizontalViewAngle_ / M_PI * 180;
+    return horizontalViewAngle_ / M_PI * 360;
 }
 
 void Camera::setFOV(double angle)
 {
-    horizontalViewAngle_ = angle / 180 * M_PI;
+    horizontalViewAngle_ = angle / 360 * M_PI;
 }
 
 void Camera::move(const arma::vec3 &relative_movement)
