@@ -7,9 +7,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <random>
+#include <cmath>
+#include <string>
 
 sf::Color randomColor()
 {
@@ -118,6 +123,11 @@ int main()
 
     KeyboardControlsManager key_controls(MOVEMENT_SPEED, ROLL_SPEED);
 
+    sf::Font noto_serif_font;
+    noto_serif_font.loadFromFile("../data/NotoSerifCJK-Regular.ttc");
+    sf::Text fov_indicator("", noto_serif_font, 16);
+    fov_indicator.setPosition(sf::Vector2f{10, 10});
+
     while (window.isOpen()) 
     {
         sf::Event event;
@@ -158,7 +168,13 @@ int main()
         mouse_controls.updateMousePosition();
 
         window.clear();
+
         window.draw(scene);
+        int fov_rounded = std::round(scene.camera().getFOV());
+        std::wstring fov_string = std::to_wstring(fov_rounded);
+        fov_indicator.setString(L"FOV: " + fov_string + L"°");
+        window.draw(fov_indicator);
+
         window.display();
     }
 }
