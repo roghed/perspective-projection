@@ -44,7 +44,7 @@ int main()
     
     Scene scene;
     {
-        auto tetrahedron = Object("../scene/tetrahedron.obj");
+        auto tetrahedron = Object("scene/tetrahedron.obj");
         for (int i = 0; i < tetrahedron.nPolygons(); ++i)
         {
             auto poly = tetrahedron.getPolygon(i);
@@ -56,7 +56,7 @@ int main()
     }
 
     {
-        auto cube = Object("../scene/cube.obj");
+        auto cube = Object("scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
@@ -68,7 +68,7 @@ int main()
     }
 
     {
-        auto cube = Object("../scene/cube.obj");
+        auto cube = Object("scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
@@ -80,7 +80,7 @@ int main()
     }
 
     {
-        auto cube = Object("../scene/cube.obj");
+        auto cube = Object("scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
@@ -92,7 +92,7 @@ int main()
     }
 
     {
-        auto cube = Object("../scene/cube.obj");
+        auto cube = Object("scene/cube.obj");
         for (int i = 0; i < cube.nPolygons(); ++i)
         {
             auto poly = cube.getPolygon(i);
@@ -104,7 +104,7 @@ int main()
     }
 
     {
-        auto cyclic_occlusion = Object("../scene/cyclic_occlusion.obj");
+        auto cyclic_occlusion = Object("scene/cyclic_occlusion.obj");
         for (int i = 0; i < cyclic_occlusion.nPolygons(); ++i)
         {
             auto poly = cyclic_occlusion.getPolygon(i);
@@ -124,7 +124,7 @@ int main()
     KeyboardControlsManager key_controls(MOVEMENT_SPEED, ROLL_SPEED);
 
     sf::Font noto_serif_font;
-    noto_serif_font.loadFromFile("../data/NotoSerifCJK-Regular.ttc");
+    noto_serif_font.loadFromFile("data/NotoSerifCJK-Regular.ttc");
     sf::Text fov_indicator("", noto_serif_font, 16);
     fov_indicator.setPosition(sf::Vector2f{10, 10});
 
