@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -43,6 +44,8 @@ int main()
     window.setMouseCursorGrabbed(true);
     
     Scene scene;
+    scene.camera().setImageDimensions({WIDTH, HEIGHT});
+
     {
         auto tetrahedron = Object("scene/tetrahedron.obj");
         for (int i = 0; i < tetrahedron.nPolygons(); ++i)
@@ -115,7 +118,7 @@ int main()
         scene.addObject(cyclic_occlusion);
     }
 
-    scene.camera().setPosition({-3, 0, 0});
+    scene.camera().setPosition({-5, -0.5, 0.5});
     scene.camera().setNearClippingDistance(0.05);
 
     MouseControlsManager mouse_controls(window, MOUSE_SENSITIVITY, ZOOM_SENSITIVITY);
@@ -127,6 +130,11 @@ int main()
     noto_serif_font.loadFromFile("data/NotoSerifCJK-Regular.ttc");
     sf::Text fov_indicator("", noto_serif_font, 16);
     fov_indicator.setPosition(sf::Vector2f{10, 10});
+
+    sf::CircleShape crosshair;
+    crosshair.setRadius(2);
+    crosshair.setOrigin(sf::Vector2f{1, 1});
+    crosshair.setPosition(sf::Vector2f{WIDTH / 2, HEIGHT / 2});
 
     while (window.isOpen()) 
     {
@@ -174,6 +182,7 @@ int main()
         std::wstring fov_string = std::to_wstring(fov_rounded);
         fov_indicator.setString(L"FOV: " + fov_string + L"°");
         window.draw(fov_indicator);
+        window.draw(crosshair);
 
         window.display();
     }
